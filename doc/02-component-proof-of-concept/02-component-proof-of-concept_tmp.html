@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>02-component-proof-of-concept.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* a11y-light theme */
+/* Based on the Tomorrow Night Eighties theme: https://github.com/isagalaev/highlight.js/blob/master/src/styles/tomorrow-night-eighties.css */
+/* @author: ericwbailey */
+
+/* Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #696969;
+}
+
+/* Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #d91e18;
+}
+
+/* Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #aa5d00;
+}
+
+/* Yellow */
+.hljs-attribute {
+  color: #aa5d00;
+}
+
+/* Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #008000;
+}
+
+/* Blue */
+.hljs-title,
+.hljs-section {
+  color: #007faa;
+}
+
+/* Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #7928a1;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  background: #fefefe;
+  color: #545454;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+@media screen and (-ms-high-contrast: active) {
+  .hljs-addition,
+  .hljs-attribute,
+  .hljs-built_in,
+  .hljs-builtin-name,
+  .hljs-bullet,
+  .hljs-comment,
+  .hljs-link,
+  .hljs-literal,
+  .hljs-meta,
+  .hljs-number,
+  .hljs-params,
+  .hljs-string,
+  .hljs-symbol,
+  .hljs-type,
+  .hljs-quote {
+        color: highlight;
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag {
+        font-weight: bold;
+    }
+}
+
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="portfolio-part-2-component-proof-of-concept">Portfolio Part 2: Component Proof-of-Concept</h1>
+<ul>
+<li><strong>Name</strong>: Christian Kim</li>
+<li><strong>Dot Number</strong>: kim.8596</li>
+<li><strong>Due Date</strong>: 10/21 @ 3:00 PM EST</li>
+</ul>
+<h2 id="assignment-overview">Assignment Overview</h2>
+<p>Previously, you brainstormed three ideas, and hopefully you got some feedback as
+well. However, it's impossible to know how reasonable your design actually is
+without trying to implement it. Because you're only just learning our full
+discipline, it could be a bit frustrating to work through learning the
+discipline while also trying to learn everything required to implement your
+design. As a result, we're going to briefly take the discipline out of the
+equation.</p>
+<p>In this assignment, you're job is to pick one of your ideas and create a single
+Java file that proves that your idea is reasonable. In the business world, this
+is sometimes called a Minimum Viable Product or MVP. The goal of an MVP is to
+get enough of the features of your original design implemented such that you can
+get meaningful feedback.</p>
+<p>Keep in mind that the goal is <strong>not</strong> to implement your entire design—just a
+piece of it, so that you are confident that it can be adapted to the OSU
+discipline. However, as before, you are welcome to be as detailed as you like.
+Because this may ultimately be something you want to share with employers,
+the more work you can put in now, the better.</p>
+<h2 id="assignment-checklist">Assignment Checklist</h2>
+<p>To be sure you have completed everything on this assignment, we have littered
+this document with TODO comments. You can browse all of them in VSCode by
+opening the TODOs window from the sidebar. The icon looks like a tree and will
+likely have a large number next to it indicating the number of TODOS. You'll
+chip away at that number over the course of the semester. However, if you'd
+like to remove this number, you can disable it by removing the following
+line from the <code>settings.json</code> file:</p>
+<pre class="hljs"><code><div><span class="hljs-string">"todo-tree.general.showActivityBarBadge"</span>: <span class="hljs-literal">true</span>,
+</div></code></pre>
+<p>Which is not to be confused with the following setting that adds the counts
+to the tree diagram (you may remove this one as well):</p>
+<pre class="hljs"><code><div><span class="hljs-string">"todo-tree.tree.showCountsInTree"</span>: <span class="hljs-literal">true</span>,
+</div></code></pre>
+<h2 id="assignment-learning-objectives">Assignment Learning Objectives</h2>
+<p>Without learning objectives, there really is no clear reason why a particular
+assessment or activity exists. Therefore, to be completely transparent, here is
+what we're hoping you will learn through this particular aspect of the portfolio
+project. Specifically, students should be able to:</p>
+<ol>
+<li>Predict which design would be appropriate to move forward with given time
+constraints, interests, and/or humility (among other real-world variables)</li>
+<li>Select appropriate methods and fields to demonstrate the achievability of
+the proof-of-concept</li>
+<li>Assemble a minimal working implementation of one of their designs</li>
+</ol>
+<h2 id="assignment-rubric-10-points">Assignment Rubric: 10 Points</h2>
+<p>Again, to be completely transparent, most of the portfolio project, except the
+final submission, is designed as a formative assessment. Formative assessments
+are meant to provide ongoing feedback in the learning process. Therefore,
+the rubric is designed to assess the learning objectives <em>directly</em> in a way
+that is low stakes—meaning you shouldn't have to worry about the grade. Just
+do good work.</p>
+<ol>
+<li>(2 points) The choice of design to implement must be justified by considering
+a variety of real-world factors. It is okay to say that you selected a
+particular design because you do not know which design is best. We will
+provide a space for you to justify your selection below.</li>
+<li>(4 points) The implementation must show off a range of methods on some
+representation to demonstrate feasibility of the overall design. Ideally,
+these methods should be significantly different. For example, don't implement
+only getters. Try to show the extent of the work that would be needed to
+implement the entire design.</li>
+<li>(4 points) The implementation must include a main method that constructs the
+component and uses it in a variety of use cases. Part of a proof-of-concept
+is showing the client view. At this stage, we care less about the actual
+implementation and more about whether a client would actually want to use it.</li>
+</ol>
+<h2 id="pre-assignment-tasks">Pre-Assignment Tasks</h2>
+<blockquote>
+<p>Because choosing a design to use moving forward may present a challenge, it
+may be a good idea to just pick one for now. There is nothing wrong with
+creating a couple interfaces that you will scrap later. Think of this as the
+process an artist might go through in refining their craft. For instance,
+you might have seen <a href="https://www.youtube.com/shorts/Kqb9l113F_0?feature=share">some of these pottery fails before</a>.
+You will have to throw out some work from time to time.</p>
+<p>With all that said, if the advice of &quot;just pick one&quot; isn't enough, consider
+using the space below to pitch an argument of why you selected one design over
+the other. Alternatively, if you hate all of your old designs, use this space
+to create a new design. In you do end up picking one at random, you should
+disclose that here as well.</p>
+</blockquote>
+<p>For my design, I think I'm going to have the kernel methods change certain
+attributes / variables about the scenario / calculation being run. For example,
+my kernel methods would mostly be mutator methods <code>change___()</code>, with only one
+method being an accessor method <code>calculatePosition(int t)</code>. However, I think I
+would need to add more--kernel--accessor methods so that the abstract class
+could access the data in required fields.</p>
+<p>In contrast, the secondary methods will be where most of the calculations are
+taking place. These methods will make use of the kernel methods to provide more
+information using the same data.</p>
+<blockquote>
+<p>Once you've argued your choice of design, make a branch in your new repo called
+something like <code>proof-of-concept</code>. There are many ways to do this, but my
+preference is to use GitHub Desktop. From there, you can click the <code>Branch</code>
+tab, select <code>New branch</code>, and name your new branch. Alternatively, VSCode has
+its own GUI for git. You can also make use of the command line directly in
+VSCode to run git commands. It's entirely up to you. Regardless of your choice,
+we'll want a branch that you can later make a pull request from with all
+your changes.</p>
+</blockquote>
+<h2 id="assignment-tasks">Assignment Tasks</h2>
+<p>As stated previously, your goal with this assignment is to produce a Java
+file that proves the possibility of your design. There are many ways to do this,
+but the general approach should be to create a Java file with the following
+features:</p>
+<ul>
+<li>A handful of methods from the original design</li>
+<li>An example field(s) demonstrating a possible representation</li>
+<li>A main method showing the component in action</li>
+</ul>
+<p>Again, our discipline dictates that all of these features be spread across
+a hierarchy of interfaces and abstract classes. You should not attempt to do
+that at this point.</p>
+<p>When you're ready to start, create a Java file anywhere in <code>src</code> and begin
+coding. See the submission directions below when you're ready to submit.</p>
+<h2 id="post-assignment">Post-Assignment</h2>
+<p>The following sections detail everything that you should do once you've
+completed the assignment.</p>
+<h3 id="changelog">Changelog</h3>
+<p>At the end of every assignment, you should update the
+<a href="../../CHANGELOG.md">CHANGELOG.md</a> file found in the root of the project folder.
+Here's what I would expect to see at the minimum:</p>
+<pre class="hljs"><code><div><span class="hljs-section"># Changelog</span>
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [<span class="hljs-string">Keep a Changelog</span>](<span class="hljs-link">https://keepachangelog.com/en/1.1.0/</span>),
+and this project adheres to [<span class="hljs-string">Calendar Versioning</span>](<span class="hljs-link">https://calver.org/</span>) of
+the following form: YYYY.0M.0D.
+
+<span class="hljs-section">## YYYY.MM.DD</span>
+
+<span class="hljs-section">### Added</span>
+<span class="hljs-bullet">
+- </span>Designed a proof of concept for <span class="xml"><span class="hljs-comment">&lt;!-- insert name of component here --&gt;</span></span> component
+
+<span class="hljs-section">### Updated</span>
+<span class="hljs-bullet">
+- </span>Changed design to include ...
+
+</div></code></pre>
+<p>Here <code>YYYY.MM.DD</code> would be the date of your submission, such as 2024.04.21.</p>
+<p>You may notice that things are nicely linked in the root CHANGELOG. If you'd
+like to accomplish that, you will need to make GitHub releases after each pull
+request merge (or at least tag your commits). This is not required.</p>
+<h3 id="submission">Submission</h3>
+<p>Assuming that your project is in a GitHub repo somewhere and your changes are on
+a proof-of-concept branch, then what we'll want you to do is create a pull
+request of all your changes. Pull requests are pretty easy to make if you're
+using GitHub Desktop. Just click the <code>Branch</code> tab and select
+<code>Create pull request</code>. This should pull up your browser with the pull request
+form ready to complete. Give your pull request a good title like &quot;Completed Part
+2 of the Portfolio Project&quot; and briefly describe what you've done. Then, click
+&quot;Create pull request&quot;.</p>
+<p>If all goes well, you should have a pull request that you can submit to Carmen
+via its URL. The URL should be in the form:
+<code>https://github.com/username/repo-name/pull/#</code></p>
+<p><strong>Note</strong>: you are the owner of the repo, so you are not required to wait for
+feedback before merging. After all, the main purpose of the pull request is to
+put all your changes in once place for a code review. However, I highly
+recommend keeping the pull request open until at least a peer has had a chance
+to look over your changes. Otherwise, you defer needed changes to later pull
+requests, which could sacrifice the overall quality of your work or result in
+major rework.</p>
+<h3 id="peer-review">Peer Review</h3>
+<p>Following the completion of this assignment, you will be assigned three
+students' assignments for review. Your job is to assess how comfortable you
+are with your peer's proof-of-concept. In other words, do you think they've
+demonstrated enough that you're confident they could complete their design
+according to our discipline.</p>
+<p>When reviewing your peers' assignments, please treat them with respect.
+Note also that we can see your comments, which could help your case if you're
+looking to become a grader. Ultimately, we recommend using the following
+feedback rubric to ensure that your feedback is both helpful and respectful
+(you may want to render the markdown as HTML or a PDF to read this rubric as a
+table).</p>
+<table>
+<thead>
+<tr>
+<th>Criteria of Constructive Feedback</th>
+<th>Missing</th>
+<th>Developing</th>
+<th>Meeting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Specific</td>
+<td>All feedback is general (not specific)</td>
+<td>Some (but not all) feedback is specific and some examples may be provided.</td>
+<td>All feedback is specific, with examples provided where possible</td>
+</tr>
+<tr>
+<td>Actionable</td>
+<td>None of the feedback provides actionable items or suggestions for improvement</td>
+<td>Some feedback provides suggestions for improvement, while some do not</td>
+<td>All (or nearly all) feedback is actionable; most criticisms are followed by suggestions for improvement</td>
+</tr>
+<tr>
+<td>Prioritized</td>
+<td>Feedback provides only major or minor concerns, but not both. Major and minar concerns are not labeled or feedback is unorganized</td>
+<td>Feedback provides both major and minor concerns, but it is not clear which is which and/or the feedback is not as well organized as it could be</td>
+<td>Feedback clearly labels major and minor concerns. Feedback is organized in a way that allows the reader to easily understand which points to prioritize in a revision</td>
+</tr>
+<tr>
+<td>Balanced</td>
+<td>Feedback describes either strengths or areas of improvement, but not both</td>
+<td>Feedback describes both strengths and areas for improvement, but it is more heavily weighted towards one or the other, and/or descusses both but does not clearly identify which part of the feedback is a strength/area for improvement</td>
+<td>Feedback provides balanced discussion of the document's strengths and areas for improvement. It is clear which piece of feedback is which</td>
+</tr>
+<tr>
+<td>Tactful</td>
+<td>Overall tone and language are not appropriate (e.g., not considerate, could be interpreted as personal criticism or attack)</td>
+<td>Overall feedback tone and language are general positive, tactul, and non-threatening, but one or more feedback comments could be interpretted as not tactful and/or feedback leans toward personal criticism, not focused on the document</td>
+<td>Feedback tone and language are positive, tactful, and non-threatening. Feedback addesses the document, not the writer</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assignment-feedback">Assignment Feedback</h3>
+<p>If you'd like to give feedback for this assignment (or any assignment, really),
+make use of <a href="https://forms.gle/dumXHo6A4Enucdkq9">this survey</a>. Your feedback helps make assignments
+better for future students.</p>
+<!-- TODO: follow the link to share your feedback then delete this comment -->
+
+</body>
+</html>
