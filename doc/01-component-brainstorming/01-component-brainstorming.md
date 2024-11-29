@@ -1,12 +1,10 @@
 # Portfolio Part 1: Component Brainstorming
 
-- **Name**: <!-- TODO: fill with first and last name (e.g., Brutus Buckeye) then delete this comment -->
-- **Dot Number**: <!-- TODO: fill with OSU dot number (e.g., buckeye.17) then delete this comment -->
-- **Due Date**: <!-- TODO: fill with due date and time (e.g., 10/17 @ 3:10 PM EST) then delete this comment -->
+- **Name**: Christian Kim
+- **Dot Number**: kim.8596
+- **Due Date**: 9/16 @ 3:00 PM EST
 
 ## Assignment Overview
-
-<!-- TODO: read the assignment overview then delete this comment -->
 
 The overall goal of the portfolio project is to have you design and implement
 your own OSU component. There are no limits to what you choose to design and
@@ -29,8 +27,6 @@ implement.
 
 ## Assignment Checklist
 
-<!-- TODO: browse the checklist then delete this comment -->
-
 To be sure you have completed everything on this assignment, we have littered
 this document with TODO comments. You can browse all of them in VSCode by
 opening the TODOs window from the sidebar. The icon looks like a tree and will
@@ -52,8 +48,6 @@ to the tree diagram (you may remove this one as well):
 
 ## Assignment Learning Objectives
 
-<!-- TODO: read the assignment learning objectives then delete this comment -->
-
 Without learning objectives, there really is no clear reason why a particular
 assessment or activity exists. Therefore, to be completely transparent, here is
 what we're hoping you will learn through this particular aspect of the portfolio
@@ -66,8 +60,6 @@ project. Specifically, students should be able to:
    discipline
 
 ## Assignment Rubric: 10 Points
-
-<!-- TODO: read the assignment rubric then delete this comment -->
 
 Again, to be completely transparent, most of the portfolio project, except the
 final submission, is designed as a formative assessment. Formative assessments
@@ -98,23 +90,17 @@ do good work.
 > brainstorming. Plus it helps us get to know you better! Feel free to share
 > images in this section.
 
-<!-- TODO: briefly talk about your interests then delete this comment.
-Also, protip: you can preview what your response looks like by hitting
-the magnifying glass icon in the upper-right corner or pressing CTRL+K and
-then V. This kind of button combination is called a chord, for whatever
-reason -->
+I love mechanics in physics is probably my favorite subject. As for where I want
+to end up in the future, I probably want to work at a company like Intel where I
+can help design new chips. I also like gaming a lot.
 
 ## Assignment
-
-<!-- TODO: read the assignment section then delete this comment -->
 
 As previously stated, you are tasked with brainstorming 3 possible components.
 To aid you in this process, we have provided [some example components][example-components]
 that may help you in your brainstorming. All of these components were made at
 some point by one of your peers, so you should feel confident that you can
 accomplish any of them.
-
-<!-- TODO: browse the list of possible projects then delete this comment -->
 
 There is no requirement that you use any of the components listed above.
 If you want to model something else, go for it! Very common early object
@@ -123,8 +109,6 @@ etc. Make of this whatever seems interesting to you, and keep in mind that
 you're just brainstorming right now. You do not have to commit to anything.
 
 ### Example Component
-
-<!-- TODO: review this example component then delete this comment -->
 
 To help you brainstorm a few components, we've provided an example below of a
 component you already know well: NaturalNumber. We highly recommend that you
@@ -192,70 +176,165 @@ will likely refine your design to make your implementation easier to use.
 
 > Please use this section to share your designs.
 
-- Component Design #1: <!-- TODO: give component a name then delete this comment -->
+- Component Design #1: Frequency Tracker
   - **Description**:
-    - <!-- TODO: describe your component then delete this comment -->
+    - The purpose of this component is to model a non-negative
+      integer. Our intent with this design was to keep a simple kernel that
+      provides the minimum functionality needed to represent a natural number.
+      Then, we provide more complex mathematical operations in the secondary
+      interface.
   - **Kernel Methods**:
-    - <!-- TODO: list kernel methods then delete this comment -->
+    - `addOccurrence(int t)`: adds an occurrence / data point to `this` at
+        time = t
+    - `removeOccurrence(int t)`: removes an occurrence / data point from `this`
+      at time = t
+    - `isEmpty()`: returns true if there are 0 occurrences entered
+    - `numberOfOccurrences(int t)`: returns the number of occurrences at
+      time = t
+
+
   - **Secondary Methods**:
-    - <!-- TODO: list secondary methods then delete this comment -->
+    - `occurrencePerInterval(int t1, int t2)`: returns the number of occurrences in
+    `this` within a certain time interval [t1, t2]
+    - `calculateAveragePerInterval(int t1, int t2)`: calculates the average
+      number of occurrences within a certain time interval [t1, t2]
+    - `calculateSTD()`: returns the standard deviation in `this`
+    - `calculateAAD()`: returns the absolute average deviation in `this`
+    - `findMaxOccurrences()`: returns the largest number of occurrences at some
+      time = t in `this`
+    - `findMinOccurences()`: returns the smallest number of occurrences at some
+      time = t in `this`
+    - `findMedian()`: returns the median number of occurrences in `this`
+    - `removeAllOccurrences(int t)`: removes all occurrences at time = t
+
+
   - **Additional Considerations** (*note*: "I don't know" is an acceptable
     answer for each of the following questions):
     - Would this component be mutable? Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - I think this component should be mutable because the number of entries
+        in `this` is constantly changing.
     - Would this component rely on any internal classes (e.g., `Map.Pair`)?
       Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - Yes, this would rely on some dynamic and sequential data structure,
+        such as a sequence. However, a map could be used if each key represented
+        some unique point in time.
     - Would this component need any enums or constants (e.g.,
       `Program.Instruction`)? Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - I do not think so; this program should only be interested in a
+        user-defined interval, which would be variable depending on both the
+        user and the use case.
     - Can you implement your secondary methods using your kernel methods?
       Answer, explain, and give at least one example:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - Yes; (1) `occurrencesPerInterval(int t1, t2)` uses
+        `numberOfOccurrences(int t)` to determine the total number of
+        occurrences. (2) `removeAllOccurrences(int t)` uses
+        `removeOccurence(int t)` to iteratively remove all occurrences at some
+        time = t... etc.
 
 
-- Component Design #2: <!-- TODO: give component a name then delete this comment -->
+- Component Design #2: Trajectory Calculator
   - **Description**:
-    - <!-- TODO: describe your component then delete this comment -->
+    - Calculates the trajectory of a projectile under ideal conditions
+      (stability of projectile due to angular momentum, no air resistance, etc.)
+      when under the influence of some gravitational field `g`.
   - **Kernel Methods**:
-    - <!-- TODO: list kernel methods then delete this comment -->
+    - `changeStartPosition(double x, double y)`: changes the starting position
+      of the trajectory, in meters
+    - `changeTargetPosition(double x, double y)`: changes the target position,
+      in meters
+    - `changeVelocity(double v)`: changes the starting velocity of the
+      projectile, in meters/second
+    - `changeDirection(double theta)`: changes the starting direction of the
+      projectile, in degrees
+    - `changeMass(double mass)`: changes the mass of the projectile (in kg)
+    - `calculatePosition(int t)`: returns the (x, y) position of the
+      projectile at some time = t
+
   - **Secondary Methods**:
-    - <!-- TODO: list secondary methods then delete this comment -->
+    - `calculateDestinationPosition()`: returns the final (x, y) position
+      of the projectile
+    - `calculateTrajectory(double tStep)`: returns a map with keys being unique
+      points in time, determined by the step size of t, tStep, and values being
+      an array containing [double x, double y]. For this method to function,
+      mass, velocity, and starting position fields must be initialized
+    - `calculateRequiredVelocity()`: calculates the velocity needed to reach the
+      target, given mass, direction, starting position, and destination
+      position
+    - `calculateRequiredMass()`: calculates the mass needed to reach the target,
+      given velocity, direction, starting position, and destination position
+    - `calculateRequiredDirection()`: calculates the direction
+      (angle from horizontal) needed to reach the target, given velocity, mass,
+      starting position, and destination position
+
   - **Additional Considerations** (*note*: "I don't know" is an acceptable
     answer for each of the following questions):
     - Would this component be mutable? Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - I think this component would be mutable because the coordinates of the
+        projectile need to be changed constantly.
     - Would this component rely on any internal classes (e.g., `Map.Pair`)?
       Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - Yes, this component would rely on Map.Pair, or perhaps some other
+        internal class / data structure that is more fitting.
     - Would this component need any enums or constants (e.g.,
       `Program.Instruction`)? Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - Yes, the gravitational constant g = 9.81.
     - Can you implement your secondary methods using your kernel methods?
       Answer, explain, and give at least one example:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - Yes, `calculateTrajectory()` would use `calculatePosition()` to
+        iteratively determine the trajectory of the projectile. In addition,
+        `calculateDestinationPosition()` would use `calculatePosition()` to
+        determine the final position of the trajectory.
 
 
-- Component Design #3: <!-- TODO: give component a name then delete this comment -->
+- Component Design #3: Assignment Tracker
   - **Description**:
-    - <!-- TODO: describe your component then delete this comment -->
+    - Tracks assignments, the classes they're for, and the dates they're due.
   - **Kernel Methods**:
-    - <!-- TODO: list kernel methods then delete this comment -->
+    - `addAssignment(String course, String title, String description, NaturalNumber dueDate)`:
+      adds an assignment to the Sequence<Map<String, String>>
+      `upcomingAssignments` for a particular course with its associated due
+      date. Creates an assignment using a map where K:String -> V:String,
+      following the format: <{"course": "myCourse"}, {"title": "myTitle"},
+      {"description": "myDescription"}, {"dueDate": dueDate.toString()}>,
+      where dueDate = MMDDYY
+    - `removeAssignment(Map<String, String> assignmentDetails)`:
+      removes an assignment matching the details provided by `assignmentDetails`
+    - `addToCompleted()`: adds an assignment to the `completedAssignments`
+      sequence.
+    - `hasNoAssignments()`: returns true if no upcoming assignments have been
+      entered
+    - `getCurrentDate()`: returns the current date
+    - `setCurrentDate(Sequence<Integer> dueDate)`: sets the current date
+
   - **Secondary Methods**:
-    - <!-- TODO: list secondary methods then delete this comment -->
+    - `getUpcomingAssignments(int nDays)`: returns the assignments due in
+      `nDays` days
+    - `advanceOneDay()`: advances the current time by one day
+    - `getOverdueAssignments()`: returns the assignments that are overdue
+    - `markCompleted(Map<String, String> assignmentDetails, NaturalNumber dueDate)`:
+      moves an assignment from the `upcomingAssignments` sequence to the
+      `completedAssignments` sequence.
+    - `markAllCompleted(NaturalNumber dueDate)`: marks all assignments due
+      on a particular due date as completed.
+
   - **Additional Considerations** (*note*: "I don't know" is an acceptable
     answer for each of the following questions):
     - Would this component be mutable? Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - I think this would be mutable because the current date and the
+        sequences containing upcoming and overdue assignments need to be changed
+        constantly.
     - Would this component rely on any internal classes (e.g., `Map.Pair`)?
       Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - Yes, this component would rely on Sequence and Maps.
     - Would this component need any enums or constants (e.g.,
       `Program.Instruction`)? Answer and explain:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - No, I don't think any constants would be necessary for this
+        component.
     - Can you implement your secondary methods using your kernel methods?
       Answer, explain, and give at least one example:
-      - <!-- TODO: provide an argument then delete this comment -->
+      - Yes, `markCompleted()` and `markAllCompleted()` use `markCompleted()`.
+        `getUpcomingAssignments()` uses `getCurrentDate()` to find nearing
+        assignments. Finally, `advanceOneDay()` uses `setCurrentDate()`.
 
 ## Post-Assignment
 
@@ -263,8 +342,6 @@ The following sections detail everything that you should do once you've
 completed the assignment.
 
 ### Changelog
-
-<!-- TODO: create CHANGELOG then delete this comment -->
 
 At the end of every assignment, you should update the
 [CHANGELOG.md](../../CHANGELOG.md) file found in the root of the project folder.
@@ -303,8 +380,6 @@ of development.
 
 ### Submission
 
-<!-- TODO: read the submission instructions then delete this comment -->
-
 If you have completed the assignment using this template, we recommend that
 you convert it to a PDF before submission. If you're not sure how, check out
 this [Markdown to PDF guide][markdown-to-pdf-guide]. However, PDFs should be
@@ -313,11 +388,7 @@ all your work is there before submitting. For future assignments, you will
 just be submitting a link to a pull request. This will be the only time
 you have to submit any PDFs.
 
-<!-- TODO: upload a PDF of this document and the CHANGELOG to Carmen then delete this comment -->
-
 ### Peer Review
-
-<!-- TODO: review the peer review guidelines then delete this comment -->
 
 Following the completion of this assignment, you will be assigned three
 students' component brainstorming assignments for review. Your job during the
@@ -343,8 +414,6 @@ PDF to read this rubric as a table).
 If you'd like to give feedback for this assignment (or any assignment, really),
 make use of [this survey][survey]. Your feedback helps make assignments
 better for future students.
-
-<!-- TODO: follow the link to share your feedback then delete this comment -->
 
 [example-components]: https://therenegadecoder.com/code/the-never-ending-list-of-small-programming-project-ideas/
 [markdown-to-pdf-guide]: https://therenegadecoder.com/blog/how-to-convert-markdown-to-a-pdf-3-quick-solutions/
