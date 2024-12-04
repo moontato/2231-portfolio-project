@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Calendar Versioning](https://calver.org/) of
 the following form: YYYY.0M.0D.
 
+## 2024.12.04
+
+### Added
+
+- Designed abstract class for ProjectileCalculator component
+
+### Updated
+
+- Changed design to include static data members: EPSILON and TEN
+- Changed design to implement hashCode()
+
 ## 2024.11.29
 
 ### Added
